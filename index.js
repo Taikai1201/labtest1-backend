@@ -37,12 +37,14 @@ const userRoute = require('./routes/UserRoutes'); // Ensure this path is correct
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "*", // Adjust according to your frontend's origin
-    methods: ["GET", "POST"]
-  }
-});
+
+const io = require('socket.io')(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  });
 
 const DB_CONNECTION_STRING = "mongodb+srv://vudangdaiduong:Taikai1201@assignment1.ij06984.mongodb.net/labtest1?retryWrites=true&w=majority";
 
@@ -79,6 +81,10 @@ io.on('connection', (socket) => {
     // Handle disconnection if needed, e.g., notify the room
   });
 });
+
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Test endpoint is working' });
+  });
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
